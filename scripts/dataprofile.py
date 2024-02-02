@@ -36,14 +36,15 @@ def fExtract(data, dataprofiles, dataprofiles_prefix):
     profile = ProfileReport(df, title=f"{name} Profiling Report", minimal=True)
     profile.to_file(f"{dataprofiles}{dataprofiles_prefix}_{name}.html")
 
+
 # function that uses fExtract to create profiles based on the data objects in the database
-# inputs: 
-# - type (table or view), 
+# inputs:
+# - type (table or view),
 # - prefix (prefix of the data objects to be profiled)
 # - dataprofiles_prefix (prefix for the profile file names
-def create_profiles(type,dataobject_prefix, file_prefix):
+def create_profiles(type, dataobject_prefix, file_prefix):
 
-    if type == 'tables':
+    if type == "tables":
         sql_tables = """
         SELECT t.name AS name 
         FROM sys.schemas AS s 
@@ -51,7 +52,9 @@ def create_profiles(type,dataobject_prefix, file_prefix):
         WHERE 
         t.name like '{dataobject_prefix}%' 
         ORDER BY 1
-        """.format(dataobject_prefix=dataobject_prefix)
+        """.format(
+            dataobject_prefix=dataobject_prefix
+        )
 
         # get list for tables
         tables = conn.execute(sql_tables)
@@ -61,13 +64,15 @@ def create_profiles(type,dataobject_prefix, file_prefix):
         for table in tables:
             fExtract(table, dataprofiles, file_prefix + "_Tbl_")
 
-    if type == 'views':
+    if type == "views":
         # get list for views
 
-        # specific 
+        # specific
         sql_views = """
         SELECT v.name as name FROM sys.views as v where v.name like '{dataobject_prefix}%' ORDER BY 1;
-        """.format(dataobject_prefix=dataobject_prefix)
+        """.format(
+            dataobject_prefix=dataobject_prefix
+        )
 
         # get list for tables
         views = conn.execute(sql_views)
@@ -77,12 +82,13 @@ def create_profiles(type,dataobject_prefix, file_prefix):
         for view in views:
             fExtract(view, dataprofiles, file_prefix + "_Vws_")
 
+
 # define params:
-dataprofiles = "data-profiles/" # folder to save the profiles
+dataprofiles = "data-profiles/"  # folder to save the profiles
 # params
-type = 'tables' # 'tables' or 'views
-dataobject_prefix = 'stg_nv' # prefix of the data objects to be profiled
-file_prefix = 'rd' # prefix for the profile file names
+type = "tables"  # 'tables' or 'views
+dataobject_prefix = "stg_nv"  # prefix of the data objects to be profiled
+file_prefix = "rd"  # prefix for the profile file names
 
 # run
-create_profiles(type,dataobject_prefix,file_prefix)
+create_profiles(type, dataobject_prefix, file_prefix)
