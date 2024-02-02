@@ -1,3 +1,8 @@
 venv/
 .env
 *.rar
+data-profiles/*.html
+data-prfiles/*.htm
+data-prfiles/*.json
+data-prfiles/*.csv
+*.json
